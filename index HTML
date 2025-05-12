@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EC Code Preview - लाइव कोड एडिटर</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .container {
+      display: flex;
+      flex: 1;
+      padding: 10px;
+      gap: 10px;
+    }
+    .editor, .preview {
+      flex: 1;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px;
+      overflow: auto;
+    }
+    h2 {
+      color: #4CAF50;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    textarea {
+      width: 100%;
+      height: 30%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-family: monospace;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: white;
+    }
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    button, select {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+    }
+    button:hover { background: #45a049; }
+    .premium-btn { background: #ff9800; }
+    .premium-btn:hover { background: #e68a00; }
+    select { background: #f0f0f0; }
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .editor, .preview { height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="editor">
+      <h2>कोड टाइप करें</h2>
+      <textarea id="htmlCode" placeholder="HTML कोड...">
+<h1>ECNEWS ब्लॉग</h1>
+<p>आपका स्वागत है!</p>
+      </textarea>
+      <textarea id="cssCode" placeholder="CSS कोड...">
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f0f0f0;
+}
+h1 {
+  color: #4CAF50;
+}
+      </textarea>
+      <textarea id="jsCode" placeholder="JavaScript कोड...">
+console.log('EC Code Preview');
+      </textarea>
+      <div class="controls">
+        <select id="themeSelect" onchange="applyTheme()">
+          <option value="default">डिफॉल्ट थीम</option>
+          <option value="ecnews">ECNEWS थीम</option>
+        </select>
+        <button onclick="updatePreview()">प्रीव्यू अपडेट करें</button>
+        <button class="premium-btn" onclick="downloadCode()">कोड डाउनलोड करें (प्रीमियम)</button>
+      </div>
+    </div>
+    <div class="preview">
+      <h2>प्रीव्यू</h2>
+      <iframe id="preview"></iframe>
+    </div>
+  </div>
+  <script>
+    function updatePreview() {
+      const html = document.getElementById('htmlCode').value;
+      const css = document.getElementById('cssCode').value;
+      const js = document.getElementById('jsCode').value;
+      const iframe = document.getElementById('preview');
+      const doc = iframe.contentDocument;
+      doc.open();
+      doc.write(`
+        <html>
+        <head>
+          <style>${css}</style>
+        </head>
+        <body>
+          ${html}
+          <script>${js}<\/script>
+        </body>
+        </html>
+      `);
+      doc.close();
+    }
 
+    function applyTheme() {
+      const theme = document.getElementById('themeSelect').value;
+      const cssInput = document.getElementById('cssCode');
+      if (theme === 'ecnews') {
+        cssInput.value = `
+body {
+  font-family: 'Arial', sans-serif;
+  background: #e0f7fa;
+  color: #333;
+  text-align: center;
+}
+h1 {
+  color: #00796b;
+  font-size: 2em;
+}
+p {
+  font-size: 1.2em;
+}
+        `;
+      } else {
+        cssInput.value = `
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f0f0f0;
+}
+h1 {
+  color: #4CAF50;
+}
+        `;
+      }
+      updatePreview();
+    }
+
+    function downloadCode() {
+      alert('प्रीमियम फीचर: कृपया सब्सक्रिप्शन खरीदें!');
+      // भविष्य में: कोड को ZIP फाइल में डाउनलोड करने के लिए FileSaver.js या सर्वर-साइड API यूज़ करें
+    }
+
+    // शुरुआती प्रीव्यू लोड करें
+    window.onload = updatePreview;
+  </script>
+</body>
+</html>
